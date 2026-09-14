@@ -23,9 +23,7 @@ CONVENTIONAL_TYPES = (
     "test",
 )
 
-CONVENTIONAL_RE = re.compile(
-    r"^(?P<type>" + "|".join(CONVENTIONAL_TYPES) + r")(\((?P<scope>[^)]+)\))?!?: .+"
-)
+CONVENTIONAL_RE = re.compile(r"^(?P<type>" + "|".join(CONVENTIONAL_TYPES) + r")(\((?P<scope>[^)]+)\))?!?: .+")
 
 BRANCH_PREFIX_RE = re.compile(r"^(?P<prefix>[a-z]+)/")
 
@@ -147,9 +145,7 @@ class GitHistoryExtractor(BaseExtractor):
                 profile.merge_strategy = "merge"
             else:
                 profile.merge_strategy = "squash-or-rebase"
-                profile.notes.append(
-                    "no merge commits observed; strategy is likely squash or rebase"
-                )
+                profile.notes.append("no merge commits observed; strategy is likely squash or rebase")
 
             if len(commits) >= 20:
                 profile.confidence = ConfidenceLevel.HIGH

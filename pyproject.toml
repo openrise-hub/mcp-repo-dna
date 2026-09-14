@@ -30,7 +30,7 @@ Homepage = "https://github.com/anomalyco/mcp-repo-dna"
 Repository = "https://github.com/anomalyco/mcp-repo-dna"
 
 [project.scripts]
-mcp-repodna = "mcp_repodna.cli:app"
+mcp-repodna = "mcp_repodna.cli:main"
 mcp-repodna-server = "mcp_repodna.server:main"
 
 [dependency-groups]

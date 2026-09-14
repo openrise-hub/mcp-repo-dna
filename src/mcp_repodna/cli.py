@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import Annotated
@@ -63,7 +64,7 @@ def _print_summary(dna: RepoDNA) -> None:
 
 @app.callback()
 def callback(
-    version: Annotated[bool, typer.Option("--version", help="Show the version and exit.")] = False,
+    version: Annotated[bool, typer.Option("--version", help="Show the version and exit.", is_eager=True)] = False,
 ) -> None:
     """mcp-repodna: repository engineering DNA for AI coding agents."""
     if version:
@@ -71,7 +72,7 @@ def callback(
         raise typer.Exit()
 
 
-@app.command()
+@app.command("analyze")
 def analyze_repo(
     repo_url: Annotated[str, typer.Argument(help="Git URL or local path of the repository.")],
     history_depth: Annotated[
@@ -94,12 +95,10 @@ def analyze_repo(
         console.print(f"[green]Wrote {paths[0]} and {paths[1]}[/green]")
 
 
-@app.command()
+@app.command("compile")
 def compile_repo(
     repo_url: Annotated[str, typer.Argument(help="Git URL or local path of the repository.")],
-    output: Annotated[
-        Path, typer.Option("--output", "-o", help="Directory to write artifacts into.")
-    ] = Path("."),
+    output: Annotated[Path, typer.Option("--output", "-o", help="Directory to write artifacts into.")] = Path("."),
     history_depth: Annotated[
         int | None, typer.Option("--history-depth", help="Commits to fetch for git history analysis.")
     ] = None,
@@ -125,5 +124,13 @@ def serve() -> None:
     mcp.run(transport="stdio")
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Console entrypoint with early handling for --version."""
+    if "--version" in sys.argv:
+        console.print(f"mcp-repodna {__version__}")
+        raise SystemExit(0)
     app()
+
+
+if __name__ == "__main__":
+    main()

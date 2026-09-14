@@ -39,9 +39,7 @@ async def analyze_repository(
         history_depth: Number of commits to fetch for git history analysis.
         output_dir: Optional directory to also write skills.sh and rules.md into.
     """
-    dna = await anyio.to_thread.run_sync(
-        partial(pipeline.analyze, repo_url, history_depth=history_depth)
-    )
+    dna = await anyio.to_thread.run_sync(partial(pipeline.analyze, repo_url, history_depth=history_depth))
     if output_dir:
         paths = compile_dna(dna).write(Path(output_dir))
         dna.notes.append(f"artifacts written to {[str(p) for p in paths]}")
@@ -61,9 +59,7 @@ async def generate_skills(
         output_dir: Directory to write skills.sh and rules.md into.
         history_depth: Number of commits to fetch for git history analysis.
     """
-    dna = await anyio.to_thread.run_sync(
-        partial(pipeline.analyze, repo_url, history_depth=history_depth)
-    )
+    dna = await anyio.to_thread.run_sync(partial(pipeline.analyze, repo_url, history_depth=history_depth))
     paths = await anyio.to_thread.run_sync(partial(compile_dna(dna).write, Path(output_dir)))
     return json.dumps({"written": [str(p) for p in paths]})
 

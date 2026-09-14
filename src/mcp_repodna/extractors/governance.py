@@ -57,8 +57,7 @@ class GovernanceExtractor(BaseExtractor):
         profile.contributing_guide = self._any_exists(context, CONTRIBUTING_NAMES)
         profile.code_of_conduct = self._any_exists(context, CONDUCT_NAMES)
         profile.code_owners = bool(
-            context.find_named("CODEOWNERS")
-            or any(path.name == "CODEOWNERS" for path in context.sample.files)
+            context.find_named("CODEOWNERS") or any(path.name == "CODEOWNERS" for path in context.sample.files)
         )
         profile.security_policy = bool(context.find_named("SECURITY.md"))
 
@@ -68,8 +67,7 @@ class GovernanceExtractor(BaseExtractor):
             profile.adr_count = sum(
                 1
                 for path in context.sample.files
-                if ADR_FILE_RE.match(path.name)
-                and Path(adr_dir) in path.relative_to(context.sample.root).parents
+                if ADR_FILE_RE.match(path.name) and Path(adr_dir) in path.relative_to(context.sample.root).parents
             )
 
         profile.issue_templates = self._issue_templates(context)

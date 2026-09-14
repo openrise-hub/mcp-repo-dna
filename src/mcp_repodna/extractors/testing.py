@@ -104,9 +104,7 @@ class TestingExtractor(BaseExtractor):
         profile.coverage_tools = self._coverage_tools(context)
 
         if profile.runner:
-            profile.confidence = (
-                ConfidenceLevel.HIGH if profile.assertion_grammar else ConfidenceLevel.MEDIUM
-            )
+            profile.confidence = ConfidenceLevel.HIGH if profile.assertion_grammar else ConfidenceLevel.MEDIUM
         elif grammar:
             profile.confidence = ConfidenceLevel.MEDIUM
         else:

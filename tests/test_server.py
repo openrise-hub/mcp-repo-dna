@@ -42,9 +42,7 @@ def test_dna_schema_resource() -> None:
     result = anyio.run(mcp.read_resource, "dna://schema")
     schema = json.loads(result[0].content)
     assert schema["title"] == "RepoDNA"
-    assert {"git", "architecture", "linters", "tooling", "testing", "governance"} <= set(
-        schema["properties"]
-    )
+    assert {"git", "architecture", "linters", "tooling", "testing", "governance"} <= set(schema["properties"])
 
 
 def test_dimensions_resource() -> None:

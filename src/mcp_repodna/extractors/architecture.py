@@ -41,9 +41,7 @@ TEST_DIR_NAMES = {"tests", "test", "__tests__", "spec", "specs", "e2e"}
 
 CO_LOCATED_RE = re.compile(r"\.(test|spec)\.[a-z0-9]+$|_(test|spec)\.[a-z0-9]+$", re.IGNORECASE)
 
-ANNOTATED_DEF_RE = re.compile(
-    r"(async\s+def|def)\s+\w+\([^)]*(?::[^)=]+|=)[^)]*\)\s*(->[^:]+)?:"
-)
+ANNOTATED_DEF_RE = re.compile(r"(async\s+def|def)\s+\w+\([^)]*(?::[^)=]+|=)[^)]*\)\s*(->[^:]+)?:")
 
 MAX_TYPE_SAMPLE_FILES = 100
 

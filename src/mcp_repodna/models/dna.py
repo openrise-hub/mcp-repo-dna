@@ -26,17 +26,11 @@ class GitConventions(BaseModel):
     conventional_commit_ratio: float = Field(
         default=0.0, ge=0.0, le=1.0, description="Share of sampled commits matching conventional style"
     )
-    merge_strategy: str | None = Field(
-        default=None, description="Detected merge strategy: squash, merge, or rebase"
-    )
-    branch_conventions: list[str] = Field(
-        default_factory=list, description="Observed branch naming patterns"
-    )
+    merge_strategy: str | None = Field(default=None, description="Detected merge strategy: squash, merge, or rebase")
+    branch_conventions: list[str] = Field(default_factory=list, description="Observed branch naming patterns")
     default_branch: str | None = Field(default=None, description="Default branch name")
     max_subject_length: int | None = Field(default=None, description="Longest commit subject observed")
-    example_commits: list[str] = Field(
-        default_factory=list, max_length=5, description="Representative commit subjects"
-    )
+    example_commits: list[str] = Field(default_factory=list, max_length=5, description="Representative commit subjects")
     notes: list[str] = Field(default_factory=list)
     confidence: ConfidenceLevel = ConfidenceLevel.LOW
 
@@ -69,9 +63,7 @@ class ArchitectureProfile(BaseModel):
     """Source layout, test placement, and typing posture."""
 
     layout: str | None = Field(default=None, description="Detected layout: src, flat, or monorepo")
-    test_layout: str | None = Field(
-        default=None, description="Where tests live: co-located, centralized, or mixed"
-    )
+    test_layout: str | None = Field(default=None, description="Where tests live: co-located, centralized, or mixed")
     typed: bool | None = Field(default=None, description="Whether the codebase uses static type hints")
     type_strictness: str | None = Field(
         default=None, description="Strictness configuration, e.g. mypy strict, pyright basic, tsconfig strict"

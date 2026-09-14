@@ -50,8 +50,7 @@ class RepoContext:
         return [
             file
             for file in self.sample.files
-            if fnmatch.fnmatch(file.name, pattern)
-            or fnmatch.fnmatch(str(file.relative_to(self.sample.root)), pattern)
+            if fnmatch.fnmatch(file.name, pattern) or fnmatch.fnmatch(str(file.relative_to(self.sample.root)), pattern)
         ]
 
     def find_named(self, name: str) -> Path | None:

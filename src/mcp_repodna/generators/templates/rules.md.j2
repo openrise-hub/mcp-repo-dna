@@ -17,11 +17,11 @@ Follow these rules when writing code, tests, or commits against it.
 {% endif -%}
 {% if dna.git.default_branch %}- Default branch: `{{ dna.git.default_branch }}`
 {% endif -%}
-{% if dna.git.branch_conventions %}- Branch prefixes: {{ dna.git.branch_conventions | join(", ") }}
+{% if branch_prefixes %}- Branch prefixes: {{ branch_prefixes | join(", ") }}
 {% endif -%}
 {% if dna.git.max_subject_length %}- Longest observed commit subject: {{ dna.git.max_subject_length }} characters
 {% endif -%}
-{% if not dna.git.commit_style and not dna.git.branch_conventions %}- No commit or branch conventions detected.
+{% if not dna.git.commit_style and not branch_prefixes %}- No commit or branch conventions detected.
 {% endif -%}
 {% if dna.git.example_commits %}
 
@@ -53,7 +53,8 @@ Representative commit subjects:
 {% endif -%}
 {% if dna.linters.line_length %}- Line length: {{ dna.linters.line_length }} characters
 {% endif -%}
-{% if dna.linters.import_sorting is not none %}- Import sorting enforced: {{ "yes" if dna.linters.import_sorting else "no" }}
+{% if dna.linters.import_sorting is true %}- Import sorting enforced: yes
+{% elif dna.linters.import_sorting is false and dna.linters.linters %}- Import sorting enforced: no
 {% endif -%}
 {% if dna.linters.editorconfig -%}
 {% if dna.linters.editorconfig.indent_style %}- Indent style: {{ dna.linters.editorconfig.indent_style }} (size {{ dna.linters.editorconfig.indent_size or "default" }})
@@ -89,7 +90,8 @@ Representative commit subjects:
 {% endif -%}
 {% if dna.testing.assertion_grammar %}- Assertion grammar: {{ dna.testing.assertion_grammar | join(", ") }}
 {% endif -%}
-{% if dna.testing.snapshot_testing is not none %}- Snapshot testing: {{ "yes" if dna.testing.snapshot_testing else "no" }}
+{% if dna.testing.snapshot_testing is true %}- Snapshot testing: yes
+{% elif dna.testing.snapshot_testing is false and dna.testing.runner %}- Snapshot testing: no
 {% endif -%}
 {% if dna.testing.coverage_tools %}- Coverage tooling: {{ dna.testing.coverage_tools | join(", ") }}
 {% endif -%}
