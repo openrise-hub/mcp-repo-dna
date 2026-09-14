@@ -64,11 +64,12 @@ class GovernanceExtractor(BaseExtractor):
 
         adr_dir = self._adr_directory(context)
         if adr_dir is not None:
-            profile.adr_directory = str(adr_dir)
+            profile.adr_directory = Path(adr_dir).as_posix()
             profile.adr_count = sum(
                 1
                 for path in context.sample.files
-                if adr_dir in path.parents and ADR_FILE_RE.match(path.name)
+                if ADR_FILE_RE.match(path.name)
+                and Path(adr_dir) in path.relative_to(context.sample.root).parents
             )
 
         profile.issue_templates = self._issue_templates(context)

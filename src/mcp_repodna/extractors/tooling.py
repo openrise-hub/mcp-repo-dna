@@ -10,8 +10,8 @@ from mcp_repodna.core.sampler import read_text
 from mcp_repodna.extractors.base import BaseExtractor, RepoContext
 from mcp_repodna.models.dna import ConfidenceLevel, ToolingProfile
 
-MAKEFILE_TARGET_RE = re.compile(r"^([a-zA-Z0-9_.-]+):")
-JUSTFILE_TARGET_RE = re.compile(r"^([a-zA-Z0-9_-]+):")
+MAKEFILE_TARGET_RE = re.compile(r"^([a-zA-Z0-9_-][a-zA-Z0-9_.-]*):", re.MULTILINE)
+JUSTFILE_TARGET_RE = re.compile(r"^([a-zA-Z0-9_-]+):", re.MULTILINE)
 PACKAGE_SCRIPT_KEYS = {"test", "lint", "format", "build", "typecheck", "check", "dev", "start"}
 PRE_COMMIT_ID_RE = re.compile(r"^\s+-\s+id:\s+(.+)$", re.MULTILINE)
 TASKFILE_TASK_RE = re.compile(r"^\s{2}([a-zA-Z0-9_-]+):", re.MULTILINE)
