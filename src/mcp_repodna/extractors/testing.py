@@ -100,7 +100,7 @@ class TestingExtractor(BaseExtractor):
                 mock_libraries.extend(self._declared_mocks(path))
         profile.mock_libraries = sorted(set(mock_libraries))
         profile.assertion_grammar = grammar
-        profile.snapshot_testing = snapshot or None
+        profile.snapshot_testing = snapshot
         profile.coverage_tools = self._coverage_tools(context)
 
         if profile.runner:

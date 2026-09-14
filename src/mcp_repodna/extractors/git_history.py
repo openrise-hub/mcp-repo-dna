@@ -69,10 +69,19 @@ def collect_commits(path: Path, max_commits: int = MAX_COMMITS) -> list[GitCommi
 
 
 def collect_branches(path: Path) -> list[str]:
-    """Return remote branch short names, e.g. origin/main, origin/feat/thing."""
+    """Return branch short names, e.g. origin/main, origin/feat/thing.
+
+    Falls back to local branch heads when no remote refs exist.
+    """
     try:
         result = subprocess.run(
-            ["git", "for-each-ref", "--format=%(refname:short)", "refs/remotes"],
+            [
+                "git",
+                "for-each-ref",
+                "--format=%(refname:short)",
+                "refs/remotes",
+                "refs/heads",
+            ],
             cwd=path,
             capture_output=True,
             text=True,
@@ -85,7 +94,7 @@ def collect_branches(path: Path) -> list[str]:
 
 
 def default_branch(path: Path) -> str | None:
-    """Resolve the default branch name from origin/HEAD."""
+    """Resolve the default branch name from origin/HEAD, falling back to HEAD."""
     try:
         result = subprocess.run(
             ["git", "symbolic-ref", "--short", "refs/remotes/origin/HEAD"],
@@ -96,9 +105,22 @@ def default_branch(path: Path) -> str | None:
             check=True,
         )
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        result = None
+    if result and result.stdout.strip():
+        name = result.stdout.strip()
+        return name.removeprefix("origin/") if name.startswith("origin/") else name
+    try:
+        fallback = subprocess.run(
+            ["git", "symbolic-ref", "--short", "HEAD"],
+            cwd=path,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
         return None
-    name = result.stdout.strip()
-    return name.removeprefix("origin/") if name.startswith("origin/") else name or None
+    return fallback.stdout.strip() or None
 
 
 class GitHistoryExtractor(BaseExtractor):

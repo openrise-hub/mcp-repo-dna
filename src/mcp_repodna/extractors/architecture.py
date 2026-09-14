@@ -77,12 +77,12 @@ class ArchitectureExtractor(BaseExtractor):
     def extract(self, context: RepoContext) -> ArchitectureProfile:
         profile = ArchitectureProfile()
 
-        manifests = {
-            relative: MANIFEST_NAMES[name]
-            for name, label in MANIFEST_NAMES.items()
-            for relative in self._manifest_paths(context, name)
-        }
-        if len(manifests) > 1:
+        manifest_dirs: dict[str, set[Path]] = {name: set() for name in MANIFEST_NAMES}
+        for name in MANIFEST_NAMES:
+            for path in self._manifest_paths(context, name):
+                manifest_dirs[name].add(path.parent)
+        monorepo = any(len(dirs) > 1 for dirs in manifest_dirs.values())
+        if monorepo:
             profile.layout = "monorepo"
         elif context.exists("src"):
             profile.layout = "src"

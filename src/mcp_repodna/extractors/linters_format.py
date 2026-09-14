@@ -64,27 +64,24 @@ def _parse_editorconfig(path: Path) -> EditorConfigSettings:
         parser.read_string(f"[root]\n{text}")
     except configparser.Error:
         return settings
-    root = parser["root"]
-    if "indent_style" in root:
-        settings.indent_style = root["indent_style"].strip()
-    if "indent_size" in root:
-        raw = root["indent_size"].strip()
-        if raw.isdigit():
-            settings.indent_size = int(raw)
-    if "end_of_line" in root:
-        settings.end_of_line = root["end_of_line"].strip()
-    if "charset" in root:
-        settings.charset = root["charset"].strip()
-    if "max_line_length" in root:
-        raw = root["max_line_length"].strip()
-        if raw.isdigit():
-            settings.max_line_length = int(raw)
-    settings.insert_final_newline = root.get("insert_final_newline", "").strip() == "true" or None
-    if not settings.insert_final_newline:
-        settings.insert_final_newline = None
-    settings.trim_trailing_whitespace = root.get("trim_trailing_whitespace", "").strip() == "true" or None
-    if not settings.trim_trailing_whitespace:
-        settings.trim_trailing_whitespace = None
+    values: dict[str, str] = {}
+    for section in parser.sections():
+        if section != "root":
+            values.update({key: value.strip() for key, value in parser[section].items()})
+    if "indent_style" in values:
+        settings.indent_style = values["indent_style"]
+    if "indent_size" in values and values["indent_size"].isdigit():
+        settings.indent_size = int(values["indent_size"])
+    if "end_of_line" in values:
+        settings.end_of_line = values["end_of_line"]
+    if "charset" in values:
+        settings.charset = values["charset"]
+    if "max_line_length" in values and values["max_line_length"].isdigit():
+        settings.max_line_length = int(values["max_line_length"])
+    if values.get("insert_final_newline") == "true":
+        settings.insert_final_newline = True
+    if values.get("trim_trailing_whitespace") == "true":
+        settings.trim_trailing_whitespace = True
     return settings
 
 
