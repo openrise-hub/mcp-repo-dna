@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -76,10 +77,8 @@ class CompilationResult:
         rules_path = output_dir / "rules.md"
         skills_path.write_text(self.skills_script, encoding="utf-8", newline="\n")
         rules_path.write_text(self.rules_markdown, encoding="utf-8", newline="\n")
-        try:
+        with suppress(OSError):  # pragma: no cover - Windows does not support chmod modes
             skills_path.chmod(0o755)
-        except OSError:  # pragma: no cover - Windows does not support chmod modes
-            pass
         return [skills_path, rules_path]
 
 

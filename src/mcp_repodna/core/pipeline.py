@@ -13,7 +13,7 @@ from mcp_repodna.core.sampler import sample_files
 from mcp_repodna.extractors import EXTRACTORS
 from mcp_repodna.extractors.base import RepoContext
 from mcp_repodna.extractors.git_history import collect_branches, collect_commits, default_branch
-from mcp_repodna.models.dna import ConfidenceLevel, DIMENSIONS, RepoDNA
+from mcp_repodna.models.dna import DIMENSIONS, ConfidenceLevel, RepoDNA
 
 logger = logging.getLogger(__name__)
 

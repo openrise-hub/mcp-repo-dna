@@ -48,8 +48,13 @@ def _print_summary(dna: RepoDNA) -> None:
     table.add_column("Key findings")
     table.add_column("Confidence", style="magenta")
     table.add_row("git", dna.git.commit_style or "unknown", dna.git.confidence.value)
-    table.add_row("architecture", dna.architecture.layout or "unknown", dna.architecture.confidence.value)
-    table.add_row("linters", ", ".join(dna.linters.formatters + dna.linters.linters) or "none", dna.linters.confidence.value)
+    table.add_row(
+        "architecture",
+        dna.architecture.layout or "unknown",
+        dna.architecture.confidence.value,
+    )
+    linter_summary = ", ".join(dna.linters.formatters + dna.linters.linters) or "none"
+    table.add_row("linters", linter_summary, dna.linters.confidence.value)
     table.add_row("tooling", dna.tooling.task_runner or "unknown", dna.tooling.confidence.value)
     table.add_row("testing", dna.testing.runner or "unknown", dna.testing.confidence.value)
     table.add_row("governance", f"adrs={dna.governance.adr_count}", dna.governance.confidence.value)
@@ -70,7 +75,7 @@ def callback(
 def analyze_repo(
     repo_url: Annotated[str, typer.Argument(help="Git URL or local path of the repository.")],
     history_depth: Annotated[
-        int, typer.Option("--history-depth", help="Commits to fetch for git history analysis.")
+        int | None, typer.Option("--history-depth", help="Commits to fetch for git history analysis.")
     ] = None,
     output: Annotated[
         Path | None, typer.Option("--output", "-o", help="Directory to write skills.sh and rules.md.")
@@ -92,9 +97,11 @@ def analyze_repo(
 @app.command()
 def compile_repo(
     repo_url: Annotated[str, typer.Argument(help="Git URL or local path of the repository.")],
-    output: Annotated[Path, typer.Option("--output", "-o", help="Directory to write artifacts into.")] = Path("."),
+    output: Annotated[
+        Path, typer.Option("--output", "-o", help="Directory to write artifacts into.")
+    ] = Path("."),
     history_depth: Annotated[
-        int, typer.Option("--history-depth", help="Commits to fetch for git history analysis.")
+        int | None, typer.Option("--history-depth", help="Commits to fetch for git history analysis.")
     ] = None,
 ) -> None:
     """Analyze a repository and write skills.sh plus rules.md."""

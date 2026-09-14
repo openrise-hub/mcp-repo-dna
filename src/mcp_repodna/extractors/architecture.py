@@ -110,9 +110,10 @@ class ArchitectureExtractor(BaseExtractor):
             root_index = parts.index(context.sample.root.name) + 1 if context.sample.root.name in parts else 0
             if root_index:
                 parts = parts[root_index:]
-            if parts[0] in TEST_DIR_NAMES and path.name.startswith("test_"):
-                centralized.add(parts[0])
-            elif any(part in TEST_DIR_NAMES for part in parts):
+            if parts and (
+                (parts[0] in TEST_DIR_NAMES and path.name.startswith("test_"))
+                or any(part in TEST_DIR_NAMES for part in parts)
+            ):
                 centralized.add(parts[0])
             if CO_LOCATED_RE.search(path.name):
                 co_located += 1

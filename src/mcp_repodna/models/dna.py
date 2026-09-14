@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class ConfidenceLevel(str, Enum):
+class ConfidenceLevel(StrEnum):
     """How much evidence backs a given extracted dimension."""
 
     LOW = "low"
@@ -99,8 +99,14 @@ class TestingProfile(BaseModel):
     """Test runner, mock strategy, and assertion grammar."""
 
     runner: str | None = Field(default=None, description="Test runner, e.g. pytest, jest, vitest")
-    mock_libraries: list[str] = Field(default_factory=list, description="Mocking libraries, e.g. pytest-mock, unittest.mock, msw")
-    assertion_grammar: list[str] = Field(default_factory=list, description="Assertion styles observed, e.g. assert, expect(...), snapshot")
+    mock_libraries: list[str] = Field(
+        default_factory=list,
+        description="Mocking libraries, e.g. pytest-mock, unittest.mock, msw",
+    )
+    assertion_grammar: list[str] = Field(
+        default_factory=list,
+        description="Assertion styles observed, e.g. assert, expect(...), snapshot",
+    )
     snapshot_testing: bool | None = Field(default=None, description="Whether snapshot tests are used")
     coverage_tools: list[str] = Field(default_factory=list, description="Coverage tooling, e.g. pytest-cov, coverage")
     notes: list[str] = Field(default_factory=list)
