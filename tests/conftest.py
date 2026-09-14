@@ -48,7 +48,9 @@ REPO_FILES: dict[str, str] = {
             "",
         )
     ),
-    "package.json": '{"name": "fake-service", "scripts": {"build": "node scripts/build.js", "start": "node server.js"}}\n',
+    "package.json": (
+        '{"name": "fake-service", "scripts": {"build": "node scripts/build.js", "start": "node server.js"}}\n'
+    ),
     ".pre-commit-config.yaml": "\n".join(
         (
             "repos:",
@@ -79,7 +81,9 @@ REPO_FILES: dict[str, str] = {
     ".github/pull_request_template.md": "## What changed\n\nDescribe your change.\n",
     ".github/ISSUE_TEMPLATE/bug_report.md": "## Describe the bug\n\nWhat happened?\n",
     "CONTRIBUTING.md": "# Contributing\n\nRead the ADRs first.\n",
-    "docs/adr/0001-record-architecture-decisions.md": "# 1. Record architecture decisions\n\nUse ADRs for significant choices.\n",
+    "docs/adr/0001-record-architecture-decisions.md": (
+        "# 1. Record architecture decisions\n\nUse ADRs for significant choices.\n"
+    ),
     "CODEOWNERS": "* @fake-org/core\n",
     "SECURITY.md": "# Security Policy\n\nReport issues privately.\n",
     "CODE_OF_CONDUCT.md": "# Code of Conduct\n\nBe kind.\n",
