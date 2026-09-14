@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Callable
 from pathlib import Path
 from typing import Annotated
 
@@ -12,7 +13,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
 from mcp_repodna import __version__
-from mcp_repodna.core.pipeline import analyze, analyze_dimension, dimension_names
+from mcp_repodna.core.pipeline import analyze
 from mcp_repodna.generators.skill_compiler import compile_dna
 from mcp_repodna.models.dna import RepoDNA
 
@@ -30,7 +31,7 @@ def _env_int(name: str, default: int) -> int:
         return default
 
 
-def _with_progress(description: str, work: callable) -> object:
+def _with_progress(description: str, work: Callable[[], object]) -> object:
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
