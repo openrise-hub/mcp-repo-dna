@@ -1,0 +1,118 @@
+# Repository Engineering DNA
+
+Source: `{{ dna.repository }}`
+Analyzed at: {{ dna.analyzed_at.strftime("%Y-%m-%d %H:%M:%S UTC") }}
+Overall confidence: {{ dna.confidence.value }}
+
+This document captures the engineering conventions of the source repository.
+Follow these rules when writing code, tests, or commits against it.
+
+## Git conventions
+
+{% if dna.git.commit_style %}- Commit style: {{ dna.git.commit_style }}
+{% endif -%}
+{% if dna.git.conventional_commit_ratio %}- Conventional commit ratio: {{ "%.0f" | format(dna.git.conventional_commit_ratio * 100) }}%
+{% endif -%}
+{% if dna.git.merge_strategy %}- Merge strategy: {{ dna.git.merge_strategy }}
+{% endif -%}
+{% if dna.git.default_branch %}- Default branch: `{{ dna.git.default_branch }}`
+{% endif -%}
+{% if dna.git.branch_conventions %}- Branch prefixes: {{ dna.git.branch_conventions | join(", ") }}
+{% endif -%}
+{% if dna.git.max_subject_length %}- Longest observed commit subject: {{ dna.git.max_subject_length }} characters
+{% endif -%}
+{% if not dna.git.commit_style and not dna.git.branch_conventions %}- No commit or branch conventions detected.
+{% endif -%}
+{% if dna.git.example_commits %}
+
+Representative commit subjects:
+
+{% for subject in dna.git.example_commits %}- `{{ subject }}`
+{% endfor %}{% endif %}
+
+## Architecture
+
+{% if dna.architecture.layout %}- Source layout: {{ dna.architecture.layout }}
+{% endif -%}
+{% if dna.architecture.test_layout %}- Test layout: {{ dna.architecture.test_layout }}
+{% endif -%}
+{% if dna.architecture.typed is not none %}- Static typing: {{ "yes" if dna.architecture.typed else "minimal" }}
+{% endif -%}
+{% if dna.architecture.type_strictness %}- Type strictness: {{ dna.architecture.type_strictness }}
+{% endif -%}
+{% if dna.architecture.dependency_manager %}- Dependency manager: {{ dna.architecture.dependency_manager }}
+{% endif -%}
+{% if not dna.architecture.layout and not dna.architecture.test_layout %}- No structural conventions detected.
+{% endif %}
+
+## Linting and formatting
+
+{% if dna.linters.formatters %}- Formatters: {{ dna.linters.formatters | join(", ") }}
+{% endif -%}
+{% if dna.linters.linters %}- Linters: {{ dna.linters.linters | join(", ") }}
+{% endif -%}
+{% if dna.linters.line_length %}- Line length: {{ dna.linters.line_length }} characters
+{% endif -%}
+{% if dna.linters.import_sorting is not none %}- Import sorting enforced: {{ "yes" if dna.linters.import_sorting else "no" }}
+{% endif -%}
+{% if dna.linters.editorconfig -%}
+{% if dna.linters.editorconfig.indent_style %}- Indent style: {{ dna.linters.editorconfig.indent_style }} (size {{ dna.linters.editorconfig.indent_size or "default" }})
+{% endif -%}
+{% if dna.linters.editorconfig.end_of_line %}- Line endings: {{ dna.linters.editorconfig.end_of_line }}
+{% endif -%}
+{% if dna.linters.editorconfig.trim_trailing_whitespace is not none %}- Trailing whitespace trimmed: {{ "yes" if dna.linters.editorconfig.trim_trailing_whitespace else "no" }}
+{% endif -%}
+{% if dna.linters.editorconfig.insert_final_newline is not none %}- Final newline required: {{ "yes" if dna.linters.editorconfig.insert_final_newline else "no" }}
+{% endif -%}
+{% endif -%}
+{% if not dna.linters.formatters and not dna.linters.linters %}- No linter or formatter configuration detected.
+{% endif %}
+
+## Tooling
+
+{% if dna.tooling.task_runner %}- Task runner: {{ dna.tooling.task_runner }}
+{% endif -%}
+{% if dna.tooling.common_tasks %}- Common tasks: {{ dna.tooling.common_tasks | join(", ") }}
+{% endif -%}
+{% if dna.tooling.pre_commit_hooks %}- Pre-commit hooks: {{ dna.tooling.pre_commit_hooks | join(", ") }}
+{% endif -%}
+{% if dna.tooling.ci_systems %}- CI systems: {{ dna.tooling.ci_systems | join(", ") }}
+{% endif -%}
+{% if not dna.tooling.task_runner and not dna.tooling.ci_systems %}- No task runner or CI configuration detected.
+{% endif %}
+
+## Testing
+
+{% if dna.testing.runner %}- Test runner: {{ dna.testing.runner }}
+{% endif -%}
+{% if dna.testing.mock_libraries %}- Mocking libraries: {{ dna.testing.mock_libraries | join(", ") }}
+{% endif -%}
+{% if dna.testing.assertion_grammar %}- Assertion grammar: {{ dna.testing.assertion_grammar | join(", ") }}
+{% endif -%}
+{% if dna.testing.snapshot_testing is not none %}- Snapshot testing: {{ "yes" if dna.testing.snapshot_testing else "no" }}
+{% endif -%}
+{% if dna.testing.coverage_tools %}- Coverage tooling: {{ dna.testing.coverage_tools | join(", ") }}
+{% endif -%}
+{% if not dna.testing.runner %}- No test runner detected.
+{% endif %}
+
+## Governance
+
+- Pull request template: {{ "yes" if dna.governance.pr_template else "no" }}
+- Contributing guide: {{ "yes" if dna.governance.contributing_guide else "no" }}
+{% if dna.governance.adr_directory %}- ADR directory: `{{ dna.governance.adr_directory }}` ({{ dna.governance.adr_count }} records)
+{% endif -%}
+{% if dna.governance.issue_templates %}- Issue templates: {{ dna.governance.issue_templates | join(", ") }}
+{% endif -%}
+- Code owners: {{ "yes" if dna.governance.code_owners else "no" }}
+- Security policy: {{ "yes" if dna.governance.security_policy else "no" }}
+- Code of conduct: {{ "yes" if dna.governance.code_of_conduct else "no" }}
+
+## Caveats
+
+{% if dna.notes %}
+{% for note in dna.notes %}- {{ note }}
+{% endfor %}
+{% else %}
+- None.
+{% endif %}
