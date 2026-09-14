@@ -8,7 +8,7 @@ from pathlib import Path
 import anyio
 from mcp.server.mcpserver import MCPServer
 
-from mcp_repodna.core.pipeline import analyze, analyze_dimension, dimension_names
+from mcp_repodna.core import pipeline
 from mcp_repodna.generators.skill_compiler import compile_dna
 from mcp_repodna.models.dna import RepoDNA
 
@@ -38,7 +38,7 @@ async def analyze_repository(
         history_depth: Number of commits to fetch for git history analysis.
         output_dir: Optional directory to also write skills.sh and rules.md into.
     """
-    dna = await anyio.to_thread.run_sync(analyze, repo_url, history_depth=history_depth)
+    dna = await anyio.to_thread.run_sync(pipeline.analyze, repo_url, history_depth=history_depth)
     if output_dir:
         paths = compile_dna(dna).write(Path(output_dir))
         dna.notes.append(f"artifacts written to {[str(p) for p in paths]}")
@@ -58,13 +58,13 @@ async def generate_skills(
         output_dir: Directory to write skills.sh and rules.md into.
         history_depth: Number of commits to fetch for git history analysis.
     """
-    dna = await anyio.to_thread.run_sync(analyze, repo_url, history_depth=history_depth)
+    dna = await anyio.to_thread.run_sync(pipeline.analyze, repo_url, history_depth=history_depth)
     paths = await anyio.to_thread.run_sync(compile_dna(dna).write, Path(output_dir))
     return json.dumps({"written": [str(p) for p in paths]})
 
 
 @mcp.tool()
-async def analyze_dimension_tool(
+async def analyze_dimension(
     repo_url: str,
     dimension: str,
     history_depth: int = 100,
@@ -77,7 +77,7 @@ async def analyze_dimension_tool(
         history_depth: Number of commits to fetch for git history analysis.
     """
     result = await anyio.to_thread.run_sync(
-        analyze_dimension, repo_url, dimension, history_depth=history_depth
+        pipeline.analyze_dimension, repo_url, dimension, history_depth=history_depth
     )
     return result.model_dump_json(indent=2)
 
@@ -85,7 +85,7 @@ async def analyze_dimension_tool(
 @mcp.tool()
 def list_dimensions() -> list[str]:
     """List the DNA dimensions available for analysis."""
-    return dimension_names()
+    return pipeline.dimension_names()
 
 
 @mcp.resource("dna://schema")
@@ -97,7 +97,7 @@ def dna_schema() -> str:
 @mcp.resource("dna://dimensions")
 def dna_dimensions() -> str:
     """JSON list of extractable DNA dimension names."""
-    return json.dumps(dimension_names(), indent=2)
+    return json.dumps(pipeline.dimension_names(), indent=2)
 
 
 def main() -> None:

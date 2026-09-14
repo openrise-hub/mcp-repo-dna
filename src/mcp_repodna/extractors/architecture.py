@@ -177,7 +177,7 @@ class ArchitectureExtractor(BaseExtractor):
     @staticmethod
     def _dependency_manager(context: RepoContext) -> str | None:
         for name, manager in DEPENDENCY_MANAGER_LOCKFILES.items():
-            if context.find_named(name) is not None:
+            if context.exists(name):
                 return manager
         if context.exists("requirements.txt"):
             return "pip"
