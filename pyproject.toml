@@ -1,0 +1,63 @@
+[project]
+name = "mcp-repodna"
+version = "0.1.0"
+description = "MCP server and CLI that reverse-engineers a repository's engineering DNA into skills.sh and rules.md for AI coding agents."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "mcp-repodna contributors" }]
+keywords = ["mcp", "model-context-protocol", "cli", "repository", "analysis", "agents"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "mcp>=1.9",
+    "pydantic>=2.7",
+    "jinja2>=3.1",
+    "rich>=13.0",
+    "typer>=0.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/anomalyco/mcp-repo-dna"
+Repository = "https://github.com/anomalyco/mcp-repo-dna"
+
+[project.scripts]
+mcp-repodna = "mcp_repodna.cli:app"
+mcp-repodna-server = "mcp_repodna.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "ruff>=0.9",
+]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_repodna"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/mcp_repodna", "README.md", "LICENSE"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
